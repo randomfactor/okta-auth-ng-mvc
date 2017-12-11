@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { MoktaService } from '../shared/test';
 
 import { HomeComponent } from './home.component';
 
@@ -8,7 +10,14 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      declarations: [ HomeComponent ],
+      providers: [
+        { 
+          provide: OAuthService,
+          useClass: MoktaService,
+          multi: false
+        }    
+      ]
     })
     .compileComponents();
   }));
