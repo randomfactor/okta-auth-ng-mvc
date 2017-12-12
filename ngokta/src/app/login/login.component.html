@@ -1,0 +1,11 @@
+<div *ngIf="isLoggedIn"  class="paper-mid paper-login">
+  <div>
+    <button (click)="logout()">Logout</button>
+  </div>
+  <div>
+    {{givenName}}
+  </div>
+</div>
+<div *ngIf="!isLoggedIn" class="paper-mid paper-login">
+  <button (click)="login()">Login</button>
+</div>

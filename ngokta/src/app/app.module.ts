@@ -8,15 +8,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { TokenComponent } from './token/token.component';
+import { LoginComponent } from './login/login.component';
 
-import { AuthGuard } from './shared';
+import { AuthGuard, OktaAuthInterceptor } from './shared';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TokenComponent
+    TokenComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,12 @@ import { AuthGuard } from './shared';
     OAuthModule.forRoot()
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
+    { 
+      provide: HTTP_INTERCEPTORS,
+      useClass: OktaAuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
