@@ -34,6 +34,17 @@ namespace dotnetokta
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Use((context, next) =>
+            {
+                if (String.IsNullOrEmpty(context.Request.Path) || context.Request.Path == "/")
+                {
+                    context.Request.Path = "/index.html";       // angular initialization
+                }
+
+                return next();
+            });
+            app.UseStaticFiles();           // static files from wwwroot
+
             app.UseMvc();
         }
     }

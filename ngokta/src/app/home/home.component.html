@@ -1,8 +1,14 @@
-<div class="row">
+<div *ngIf="errorMessage" class="row">
+  <div class="alert alert-danger">Error: {{errorMessage}}</div>
+</div>
+<div class="row flex-center">
   <div *ngIf="isValidLogin" class="sm-12 col border border-primary">
     <p>
       You are logged in.
     </p>
+  </div>
+  <div *ngFor="let value of values" class="sm-4 md-3 lg-2 col">
+    {{value}}
   </div>
   <div *ngIf="!isValidLogin" class="sm-12 col border border-2">
     <p>
@@ -10,6 +16,4 @@
     </p>
   </div>
 </div>
-<p>
-  home works!
-</p>
+
