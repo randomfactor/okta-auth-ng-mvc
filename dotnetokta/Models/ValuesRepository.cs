@@ -33,5 +33,23 @@ namespace dotnetokta.Models
         public IList<HeldValue> GetAll() {
             return (this.Repo);
         }
+
+        public void Create(string value, string id, string owner)
+        {
+            HeldValue newVal = new HeldValue(value, id, owner);
+            this.Repo.Add(newVal);
+        }
+
+        public bool Delete(string value, string id)
+        {
+            HeldValue victim = this.Repo.Find((v) => v.name == value && v.ownerId == id);
+            if (victim != null) {
+                return (this.Repo.Remove(victim));
+            } 
+            else 
+            {
+                return (false);
+            }
+        }
     }
 }

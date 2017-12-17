@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,10 +16,9 @@ namespace dotnetokta.Controllers
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<HeldValue> Get()
         {
-            return (ValuesRepository.Instance.GetAll()
-                .Select((t) => t.name));
+            return (ValuesRepository.Instance.GetAll());
         }
 
         // GET api/values/5
@@ -32,18 +32,39 @@ namespace dotnetokta.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+            var ownerClaim = this.User.Claims.FirstOrDefault((c) => c.Type == "uid");
+            if (ownerClaim != null)
+            {
+                string ownerId = ownerClaim.Issuer + "." + ownerClaim.Value;
+                ValuesRepository.Instance.Create(value, ownerId, "Get This Somehow");
+            }
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/values/"take care of your pets"
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(string id)
         {
+            string name = id;
+            string ownerId;
+
+            var ownerClaim = this.User.Claims.FirstOrDefault((c) => c.Type == "uid");
+            if (ownerClaim != null)
+            {
+                ownerId = ownerClaim.Issuer + "." + ownerClaim.Value;
+            
+                if (ValuesRepository.Instance.Delete(name, ownerId))
+                {
+                    return (Ok(name));
+                }
+            }
+
+            return (NotFound(name));
         }
     }
 }

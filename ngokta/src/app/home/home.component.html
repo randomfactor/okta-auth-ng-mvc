@@ -7,8 +7,21 @@
       You are logged in.
     </p>
   </div>
-  <div *ngFor="let value of values" class="sm-4 md-3 lg-2 col">
-    {{value}}
+  <div class="sm-10 md-8 lg-6 col">
+    <table>
+      <thead>
+        <tr>
+          <th>Value</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let value of values">
+          <td>{{value.name}}</td>
+          <td>{{value.ownerName}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div *ngIf="!isValidLogin" class="sm-12 col border border-2">
     <p>

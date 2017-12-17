@@ -4,13 +4,15 @@ import { Observable } from 'rxjs/Rx';
 import { OAuthService } from 'angular-oauth2-oidc';
 import 'rxjs/add/operator/mergeMap';
 
+import { HeldValue } from '../shared';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public values: string[] = ["Eat", "at", "Fred's"];
+  public values: HeldValue[] = [];
   public errorMessage: string = null;
 
   constructor(private oauthService: OAuthService, private http: HttpClient) { }
@@ -18,7 +20,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getValues().subscribe(
       (v) => {
-        this.values.push(v);
+        this.values.push(v as HeldValue);
       },
       (err) => {
         this.errorMessage = err.message;
@@ -27,10 +29,10 @@ export class HomeComponent implements OnInit {
   }
 
   get isValidLogin(): boolean {
-    return this.oauthService.hasValidAccessToken();
+    return this.oauthService.hasValidAccessToken(); 
   }
 
-  getValues(): Observable<string> {
+  getValues(): Observable<object> {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     headers.append('Accept', 'application/json');
@@ -38,6 +40,6 @@ export class HomeComponent implements OnInit {
     // return observable
     let webObservable = this.http.get('http://localhost:5000/api/values', { headers: headers });
 
-    return webObservable.flatMap((x: string) => x);
+    return webObservable.flatMap((x: any) => x);
   }
 }
