@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+using dotnetokta.Models;
 
 namespace dotnetokta.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
@@ -13,7 +17,8 @@ namespace dotnetokta.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return (ValuesRepository.Instance.GetAll()
+                .Select((t) => t.name));
         }
 
         // GET api/values/5

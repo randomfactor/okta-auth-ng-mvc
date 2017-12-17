@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { OAuthService } from 'angular-oauth2-oidc';
 import 'rxjs/add/operator/mergeMap';
@@ -16,10 +16,14 @@ export class HomeComponent implements OnInit {
   constructor(private oauthService: OAuthService, private http: HttpClient) { }
 
   ngOnInit() {
-    this.getValues().subscribe((v) => {
-      this.values.push(v);
-    },
-    (err) => { this.errorMessage = err.message; });
+    this.getValues().subscribe(
+      (v) => {
+        this.values.push(v);
+      },
+      (err) => {
+        this.errorMessage = err.message;
+        console.log(JSON.stringify(err));
+      });
   }
 
   get isValidLogin(): boolean {
@@ -32,8 +36,7 @@ export class HomeComponent implements OnInit {
     headers.append('Accept', 'application/json');
 
     // return observable
-    let webObservable = this.http.get('/api/values', { headers: headers });
-    debugger;
+    let webObservable = this.http.get('http://localhost:5000/api/values', { headers: headers });
 
     return webObservable.flatMap((x: string) => x);
   }
