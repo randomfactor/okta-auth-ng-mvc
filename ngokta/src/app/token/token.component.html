@@ -1,3 +1,21 @@
-<p>
-  token works!
-</p>
+<div *ngIf="errorMessage" class="row">
+  <div class="alert alert-danger">Error: {{errorMessage}}</div>
+</div>
+<div class="row flex-center">
+  <div class="sm-10 md-8 lg-6 col">
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let claim of claims">
+          <td>{{claim[0]}}</td>
+          <td>{{claim[1]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
