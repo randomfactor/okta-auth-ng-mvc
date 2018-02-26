@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+dotnetokta/dotnetokta.sln
+dotnetokta/Properties/launchSettings.json

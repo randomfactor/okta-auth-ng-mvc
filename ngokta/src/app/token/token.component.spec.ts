@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { OAuthService } from 'angular-oauth2-oidc';
+import { MoktaService } from '../shared/test';
 import { TokenComponent } from './token.component';
 
 describe('TokenComponent', () => {
@@ -8,7 +10,14 @@ describe('TokenComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TokenComponent ]
+      declarations: [ TokenComponent ],
+      providers: [
+        {
+          provide: OAuthService,
+          useClass: MoktaService,
+          multi: false
+        }
+      ]
     })
     .compileComponents();
   }));

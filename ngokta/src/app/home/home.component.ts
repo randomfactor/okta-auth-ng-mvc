@@ -14,32 +14,55 @@ import { HeldValue } from '../shared';
 export class HomeComponent implements OnInit {
   public values: HeldValue[] = [];
   public errorMessage: string = null;
+  public newValue: string = null;
+
+  private valuesUrl = 'http://localhost:5000/api/values';
 
   constructor(private oauthService: OAuthService, private http: HttpClient) { }
 
   ngOnInit() {
-    this.getValues().subscribe(
-      (v) => {
-        this.values.push(v as HeldValue);
-      },
-      (err) => {
-        this.errorMessage = err.message;
-        console.log(JSON.stringify(err));
-      });
+    this.getValues();
   }
 
   get isValidLogin(): boolean {
     return this.oauthService.hasValidAccessToken(); 
   }
 
-  getValues(): Observable<object> {
+  getValues(): void {
+    this.values = [];
+
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     headers.append('Accept', 'application/json');
 
     // return observable
-    let webObservable = this.http.get('http://localhost:5000/api/values', { headers: headers });
+    let webObservable = this.http.get(this.valuesUrl, { headers: headers });
 
-    return webObservable.flatMap((x: any) => x);
+    webObservable.flatMap((x: any) => x).subscribe(
+      (v) => {
+        this.values.push(v as HeldValue);
+      },
+      (err) => {
+        this.errorMessage = err.message;
+        console.log(JSON.stringify(err));
+      });;
+  }
+
+  addNewValue(): void {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    headers.append('Accept', 'application/json');
+
+    // post new value
+    let webObservable = this.http.post(this.valuesUrl, '"' + this.newValue + '"', { headers: headers });
+
+    webObservable.subscribe(
+      (v) => {
+        this.newValue = null;
+      },
+      (err) => {
+        this.errorMessage = err.message;
+        console.log(JSON.stringify(err));
+      });
   }
 }
