@@ -2,26 +2,39 @@
   <div class="alert alert-danger">Error: {{errorMessage}}</div>
 </div>
 <div class="row flex-center">
-  <div *ngIf="isValidLogin" class="sm-12 col border border-primary">
-    <p>
-      You are logged in.
-    </p>
-  </div>
-  <div class="sm-10 md-8 lg-6 col">
+  <div *ngIf="isValidLogin" class="sm-10 md-8 lg-6 col border border-primary">
     <table>
       <thead>
         <tr>
+          <th width="40px"><label class="paper-btn" for="new-value-modal" popover-right="Add new value.">+</label></th>
           <th>Value</th>
           <th>Owner</th>
+          <th width = "40px">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let value of values">
+          <td></td>
           <td>{{value.name}}</td>
           <td>{{value.ownerName}}</td>
+          <td><button *ngIf="value.ownerName == ownerEmail" class="btn-small btn-danger" (click)="deleteValue(value.name)">X</button> </td>
         </tr>
       </tbody>
     </table>
+    <input class="modal-state" id="new-value-modal" type="checkbox">
+    <div class="modal">
+      <label class="modal-bg" for="new-value-modal"></label>
+      <div class="modal-body">
+          <label class="btn-close" for="new-value-modal">X</label>
+          <h4 class="modal-title">Add New Value</h4>
+          <h5 class="modal-subtitle">Enter a string value to be added to the list of values.</h5>
+          <p class="modal-text">
+              <input [(ngModel)]="newValue">
+          </p>
+          <button class="btn-small" (click)="addNewValue()">Add</button>
+          <label for="new-value-modal" class="modal-link">Close</label>
+      </div>
+    </div>
   </div>
   <div *ngIf="!isValidLogin" class="sm-12 col border border-2">
     <p>

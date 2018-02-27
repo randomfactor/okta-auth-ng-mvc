@@ -32,11 +32,13 @@ namespace dotnetokta.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+            var ownerName = this.User.Claims.FirstOrDefault((c) => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+
             var ownerClaim = this.User.Claims.FirstOrDefault((c) => c.Type == "uid");
             if (ownerClaim != null)
             {
                 string ownerId = ownerClaim.Issuer + "." + ownerClaim.Value;
-                ValuesRepository.Instance.Create(value, ownerId, "Get This Somehow");
+                ValuesRepository.Instance.Create(value, ownerId, ownerName.Value);
             }
         }
 
@@ -60,11 +62,11 @@ namespace dotnetokta.Controllers
             
                 if (ValuesRepository.Instance.Delete(name, ownerId))
                 {
-                    return (Ok(name));
+                    return (Ok());
                 }
             }
 
-            return (NotFound(name));
+            return (NotFound());
         }
     }
 }
