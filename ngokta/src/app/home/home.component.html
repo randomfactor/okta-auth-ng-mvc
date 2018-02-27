@@ -9,6 +9,7 @@
           <th width="40px"><label class="paper-btn" for="new-value-modal" popover-right="Add new value.">+</label></th>
           <th>Value</th>
           <th>Owner</th>
+          <th width = "40px">Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,7 @@
           <td></td>
           <td>{{value.name}}</td>
           <td>{{value.ownerName}}</td>
+          <td><button *ngIf="value.ownerName == ownerEmail" class="btn-small btn-danger" (click)="deleteValue(value.name)">X</button> </td>
         </tr>
       </tbody>
     </table>
